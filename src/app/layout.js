@@ -1,8 +1,8 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
-import CCIcon from "../../components/CCIcon";
+import CCIcon from "../components/CCIcon";
 import Link from "next/link";
-import UploadIcon from "../../components/UploadIcon";
+import UploadIcon from "../components/UploadIcon";
 
 const inter = Inter({ subsets: ["latin"] });
 

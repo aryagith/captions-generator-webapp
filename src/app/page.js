@@ -1,7 +1,7 @@
-import DemoSection from "../../components/DemoSection";
-import PageHeaders from "../../components/PageHeaders";
-import UploadForm from "../../components/UploadForm";
-import UploadIcon from "../../components/UploadIcon";
+import DemoSection from "../components/DemoSection";
+import PageHeaders from "../components/PageHeaders";
+import UploadForm from "../components/UploadForm";
+import UploadIcon from "../components/UploadIcon";
 
 export default function Home() {
   return (
