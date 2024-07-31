@@ -29,6 +29,17 @@ async function createTranscriptionJob(fileName){
     return transcribeClient.send(transcriptionCommand);
 }
 
+async function streamToString(stream){
+    const chunks = [];
+    return new Promise((resolve , reject) => {
+        stream.on('data', chunk => chunks.push(Buffer.from(chunk)));
+        stream.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')))
+        stream.on('error', reject)
+    
+    });
+
+}
+
 async function getTranscriptionFile(fileName){
     const transcriptionFile= fileName + '.transcription';
     const s3client = new S3Client({
@@ -49,11 +60,9 @@ async function getTranscriptionFile(fileName){
     catch(error){}
 
     if(transcriptionFileResponse){
-        const chunks= [];
-        for(let chunk of transcriptionFileResponse.Body){
-            console.log(chunk);
-        }
+        return JSON.parse(await streamToString(transcriptionFileResponse.Body));  
     }
+    return null;
 }
 
 //returns null if job does not exist
@@ -76,7 +85,13 @@ export async function GET(req){
     const filename = searchParams.get('filename');
    
     //find ready transcription
-    await getTranscriptionFile(filename);
+   const transcription = await getTranscriptionFile(filename);
+   if (transcription){
+    return Response.json({
+        status: 'COMPLETED',
+        transcription,
+    });
+   }
 
     
     
@@ -85,7 +100,7 @@ export async function GET(req){
 
     if(existingJob) {
         return Response.json({
-            status: existingJob.TranscriptionJob.TranscriptionJobStatus,
+            status:existingJob.TranscriptionJob.TranscriptionJobStatus,
         })
     }
 
