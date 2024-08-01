@@ -3,9 +3,9 @@ import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
 
 function getClient(){
     return(new TranscribeClient({
-        region: process.env.REGION,
+        region: process.env.BUCKET_REGION,
         credentials: {
-            accessKeyId: process.env.AWS_ACCESS_KEY,
+            accessKeyId: process.env.AWS_ACCESS_KEY_ID,
             secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
         },
     }));
@@ -43,9 +43,9 @@ async function streamToString(stream){
 async function getTranscriptionFile(fileName){
     const transcriptionFile= fileName + '.transcription';
     const s3client = new S3Client({
-        region: process.env.REGION,
+        region: process.env.BUCKET_REGION,
         credentials: {
-            accessKeyId: process.env.AWS_ACCESS_KEY,
+            accessKeyId: process.env.AWS_ACCESS_KEY_ID,
             secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
         },
     });
