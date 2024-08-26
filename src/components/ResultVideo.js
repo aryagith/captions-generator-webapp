@@ -15,7 +15,7 @@ export default function ResultVideo({fileName, transcriptionItems}){
 
     useEffect(()=>{
         videoRef.current.src = videoUrl;
-    }, []);
+    }, );
 
     // const load = async () => {
     //     const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd'
