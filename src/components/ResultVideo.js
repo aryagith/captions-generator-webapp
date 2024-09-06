@@ -5,6 +5,7 @@ import { toBlobURL, fetchFile } from "@ffmpeg/util";
 import { useState, useRef, useEffect } from "react";
 import roboto from './../fonts/Roboto-Regular.ttf';
 import robotoBold from './../fonts/Roboto-Bold.ttf';
+import OptionsIcon from "./OptionsIcon";
 
 
 export default function ResultVideo({fileName, transcriptionItems}){
@@ -76,42 +77,66 @@ export default function ResultVideo({fileName, transcriptionItems}){
     //         URL.createObjectURL(new Blob([data.buffer], {type: 'video/mp4'}));
     // }
 
-return (
-    <>
-    <div className="relative mb-4">   
-    <div className="inline-flex items-center">  
-    <span>Primary color:</span>   
-    <input type="color" value={primaryColor} id="style1" onChange={ev=> setPrimaryColor(ev.target.value)}/>
-    </div>  
-    <br/>
-    <div className="inline-flex items-center">
-    <span>Outline color:</span>
-    <input type="color" value={outlineColor} id="style1" onChange={ev=> setOutlineColor(ev.target.value)}/>
-    </div>
-    </div>
-    <div className="rounded-lg overflow-hidden">
-            <video 
-            ref={videoRef}
-            controls
-            ></video>
-        </div>
-        <div className="relative mt-4 flex">
-        <div className="mr-2">
-        <button 
-        onClick={transcode}
-        className="bg-black text-white py-2 px-6 rounded-full inline-flex gap-2 border-2 border-blue-700/50 cursor-pointer items-center">
-            <div> <SparklesIcon /></div>
-           <div> <span>Apply captions!</span> </div>
-        </button>
-        </div>
-        <div className="ml-2">
-        <button 
-        className="bg-black text-white py-2 px-6 rounded-full inline-flex gap-2 border-2 border-blue-700/50 cursor-pointer items-center">
-            <div><SparklesIcon /> </div>
-            <div ><span>Download video!</span></div>
-        </button>
-        </div>
-    </div>
-    </>
-    );
-}
+    return (
+        <>
+          {/* Color pickers */}
+          <div className="relative mb-6">
+            {/* Primary Color */}
+            <div className="flex items-center mb-4">
+              <span className="mr-2 font-medium">Primary color:</span>
+              <input
+                type="color"
+                value={primaryColor}
+                id="style1"
+                className="w-10 h-10 border-2 border-gray-300 rounded-lg cursor-pointer"
+                onChange={(ev) => setPrimaryColor(ev.target.value)}
+              />
+            </div>
+      
+            {/* Outline Color */}
+            <div className="flex items-center">
+              <span className="mr-2 font-medium">Outline color:</span>
+              <input
+                type="color"
+                value={outlineColor}
+                id="style1"
+                className="w-10 h-10 border-2 border-gray-300 rounded-lg cursor-pointer"
+                onChange={(ev) => setOutlineColor(ev.target.value)}
+              />
+            </div>
+          </div>
+      
+          {/* Video Player */}
+          <div className="rounded-lg overflow-hidden shadow-lg mb-6">
+            <video ref={videoRef} controls className="w-full h-auto rounded-lg"></video>
+          </div>
+      
+          {/* Action Buttons and Instructions */}
+          <div className="relative mt-4 flex flex-col items-center">
+            {/* Apply Captions Button */}
+            <div className="mb-4">
+              <button
+                onClick={transcode}
+                className="bg-black text-white py-3 px-8 rounded-full inline-flex gap-2 border-2 border-blue-700/50 cursor-pointer items-center hover:bg-blue-600 transition"
+              >
+                <SparklesIcon className="w-5 h-5" />
+                <span>Apply captions!</span>
+              </button>
+            </div>
+      
+            {/* Instruction Text */}
+            <div className="text-center">
+            <p className=" inline-flex flex-wrap items-center text-lg leading-relaxed font-normal">
+  <span className="font-normal">Press the</span>
+  <span className="mx-2 inline-flex items-center">
+    <OptionsIcon className="inline-block text-xl" />
+  </span>
+  <span className="font-normal">on the video player</span>
+  <br />
+  <span className="font-normal">to download your video.</span>
+</p>
+            </div>
+          </div>
+        </>
+      );      
+    }
