@@ -53,7 +53,6 @@ export default function ResultVideo({fileName, transcriptionItems}){
         await ffmpeg.exec([
             '-i', fileName,
             '-preset','ultrafast',
-            '-to','00:00:05',
             '-vf',`subtitles=subs.srt:fontsdir=/tmp:force_style='Fontname=Roboto,FontSize=30,MarginV=40,PrimaryColour=${rgbToFFmpegColor(primaryColor)},OutlineColour=${rgbToFFmpegColor(outlineColor)}'`,
             'output.mp4'
         ]);
