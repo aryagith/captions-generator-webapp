@@ -2,19 +2,276 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --bg: #f0eee9;
+  --ink: #0a0a0a;
+  --ink-muted: rgba(10, 10, 10, 0.72);
+  --cream: #f5f0e6;
+  --glass: rgba(255, 255, 255, 0.5);
+  --glass-border: rgba(255, 255, 255, 0.8);
+  --glass-strong: rgba(255, 255, 255, 0.65);
+  --cta-bg: #111111;
+  --cta-fg: #f5f0e6;
+  --nav-active-bg: #111111;
+  --nav-active-fg: #f5f0e6;
+  --grain-opacity: 0.2;
+  --grain-blend: multiply;
+}
+
+html.dark {
+  --bg: #0a0a0a;
+  --ink: #f5f0e6;
+  --ink-muted: rgba(245, 240, 230, 0.78);
+  --cream: #f5f0e6;
+  --glass: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-strong: rgba(255, 255, 255, 0.1);
+  --cta-bg: #f5f0e6;
+  --cta-fg: #111111;
+  --nav-active-bg: #f5f0e6;
+  --nav-active-fg: #111111;
+  --grain-opacity: 0.26;
+  --grain-blend: soft-light;
+}
+
+html {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+/* Subtle full-page fine grain (cached SVG, low octaves) */
+.page-grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: var(--grain-blend);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.6' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+.glass-panel {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.glass-nav {
+  background: var(--glass-strong);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.cta-pill {
+  background: var(--cta-bg);
+  color: var(--cta-fg);
+  transition: transform 0.18s ease;
+}
+
+.cta-pill:hover {
+  transform: translate3d(0, -2px, 0);
+}
+
+/* Soft atmospheric haze — fewer blur layers for smoother compositing */
+.chroma-scene {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+  contain: paint;
+  transform: translateZ(0);
+  isolation: isolate;
+}
+
+.chroma-blob {
+  position: absolute;
+  left: 46%;
+  top: 36%;
+  transform: translate3d(-50%, -50%, 0) rotate(-12deg);
+  width: min(720px, 110vw);
+  height: clamp(280px, 50vw, 420px);
+}
+
+.chroma-rim,
+.chroma-core {
+  position: absolute;
+  border-radius: 62% 38% 58% 42% / 48% 55% 45% 52%;
+}
+
+.chroma-rim {
+  inset: -16%;
+  background: linear-gradient(118deg, #60a5fa, #4ade80 40%, #facc15 70%, #f87171);
+  filter: blur(56px);
+  opacity: 0.4;
+}
+
+.chroma-core {
+  inset: 10% 8% 8% 16%;
+  border-radius: 48% 52% 40% 60% / 55% 40% 60% 45%;
+  background: linear-gradient(145deg, #1d4ed8 0%, #16a34a 38%, #ca8a04 68%, #dc2626 100%);
+  filter: blur(40px);
+  opacity: 0.45;
+}
+
+html.dark .chroma-rim {
+  opacity: 0.34;
+}
+
+html.dark .chroma-core {
+  opacity: 0.38;
+}
+
+.chroma-accent {
+  position: absolute;
+  filter: blur(48px);
+}
+
+.chroma-accent-a {
+  width: 300px;
+  height: 180px;
+  left: -8%;
+  bottom: 8%;
+  border-radius: 80% 20% 70% 30% / 45% 55% 40% 60%;
+  background: linear-gradient(90deg, #60a5fa, #4ade80);
+  opacity: 0.32;
+  transform: rotate(18deg);
+}
+
+.chroma-accent-b {
+  width: 260px;
+  height: 280px;
+  right: -12%;
+  bottom: -4%;
+  border-radius: 40% 60% 35% 65% / 55% 35% 65% 45%;
+  background: linear-gradient(200deg, #ef4444 10%, #f87171 45%, #facc15 90%);
+  opacity: 0.3;
+  transform: rotate(-22deg);
+}
+
+html.dark .chroma-accent-a {
+  opacity: 0.26;
+}
+
+html.dark .chroma-accent-b {
+  opacity: 0.24;
+}
+
+/* Fine grain — two layers max, denser over glow */
+.grain-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-repeat: repeat;
+}
+
+.grain-dense {
+  opacity: 0.4;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='d'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='3.0' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23d)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  -webkit-mask-image: radial-gradient(ellipse 55% 45% at 48% 34%, #000 0%, #000 30%, transparent 68%);
+  mask-image: radial-gradient(ellipse 55% 45% at 48% 34%, #000 0%, #000 30%, transparent 68%);
+}
+
+.grain-sparse {
+  opacity: 0.12;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.2' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23s)'/%3E%3C/svg%3E");
+  background-size: 280px 280px;
+}
+
+html.dark .grain-dense {
+  opacity: 0.5;
+  mix-blend-mode: soft-light;
+}
+
+html.dark .grain-sparse {
+  opacity: 0.16;
+}
+
+/* One-shot intro motion only — opacity + transform3d (compositor-friendly) */
+@keyframes film-title-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes film-fade-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 6px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.film-kicker {
+  font-style: italic;
+  letter-spacing: 0.08em;
+  animation: film-fade-up 0.7s ease both;
+}
+
+.film-title {
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  animation: film-title-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.film-fade {
+  animation: film-fade-up 0.65s ease 0.08s both;
+}
+
+.film-fade-late {
+  animation: film-fade-up 0.65s ease 0.14s both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .film-kicker,
+  .film-title,
+  .film-fade,
+  .film-fade-late {
+    animation: none;
+  }
+
+  .cta-pill {
+    transition: none;
+  }
+}
+
 #style1 {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-  }
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
 #style1::-webkit-color-swatch {
-    border-radius: 15px;
-    border: none;
-  }
+  border-radius: 15px;
+  border: none;
+}
 #style1::-moz-color-swatch {
-    border-radius: 15px;
-    border: none;
-  }
+  border-radius: 15px;
+  border: none;
+}
