@@ -14,12 +14,12 @@ export default function PricingPage() {
         >
           Pricing
         </h1>
-        <p className="film-fade mt-3 text-[var(--ink-muted)] max-w-md mx-auto text-sm sm:text-base">
+        <p className="mt-3 text-[var(--ink-muted)] max-w-md mx-auto text-sm sm:text-base">
           You don&apos;t even need to login. Enjoy unlimited access for free.
         </p>
       </section>
 
-      <div className="film-fade-late flex justify-center">
+      <div className="flex justify-center">
         <div className="glass-panel rounded-3xl p-6 sm:p-8 w-full max-w-sm text-center shadow-lg shadow-black/10">
           <h2 className="text-lg font-semibold mb-2 text-[var(--ink)]">
             Current plan

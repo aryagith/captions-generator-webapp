@@ -17,10 +17,10 @@ export default function Home() {
         >
           Captioner
         </h1>
-        <p className="film-fade mt-4 mx-auto max-w-sm text-sm sm:text-base text-[var(--ink-muted)]">
+        <p className="mt-4 mx-auto max-w-sm text-sm sm:text-base text-[var(--ink-muted)]">
           Beautiful captions in one upload. Free forever — no login.
         </p>
-        <div className="film-fade-late mt-8 flex justify-center">
+        <div className="mt-8 flex justify-center">
           <UploadForm />
         </div>
       </section>

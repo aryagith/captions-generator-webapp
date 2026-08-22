@@ -15,6 +15,7 @@ export default function DemoSection() {
             loop
             muted
             playsInline
+            preload="metadata"
           />
         </div>
       </div>
@@ -35,6 +36,7 @@ export default function DemoSection() {
             loop
             muted
             playsInline
+            preload="metadata"
           />
         </div>
       </div>
