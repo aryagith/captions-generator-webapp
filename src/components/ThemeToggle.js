@@ -16,7 +16,7 @@ export default function ThemeToggle() {
       onClick={cycleTheme}
       aria-label={label}
       title={label}
-      className="w-8 h-8 rounded-full glass-nav inline-flex items-center justify-center text-sm text-[var(--ink)]"
+      className="w-8 h-8 rounded-full glass-nav inline-flex items-center justify-center text-sm text-[var(--ink)] hover:scale-105 transition-transform"
     >
       {resolved === 'dark' ? '☾' : '☀'}
     </button>

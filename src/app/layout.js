@@ -48,7 +48,7 @@ export default function RootLayout({ children }) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
-      <body className={`${dmSans.className} page-grain relative`}>
+      <body className={`${dmSans.className} relative`}>
         <ThemeProvider>
           <ChromaBackground />
           <main className="relative z-10 p-4 sm:p-6 max-w-3xl mx-auto min-h-screen">

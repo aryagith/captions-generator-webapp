@@ -3,33 +3,35 @@
 @tailwind utilities;
 
 :root {
-  --bg: #f0eee9;
-  --ink: #0a0a0a;
-  --ink-muted: rgba(10, 10, 10, 0.72);
-  --cream: #f5f0e6;
-  --glass: rgba(255, 255, 255, 0.72);
-  --glass-border: rgba(255, 255, 255, 0.85);
-  --glass-strong: rgba(255, 255, 255, 0.78);
-  --cta-bg: #111111;
-  --cta-fg: #f5f0e6;
-  --nav-active-bg: #111111;
-  --nav-active-fg: #f5f0e6;
-  --grain-opacity: 0.35;
-}
-
-html.dark {
-  --bg: #0a0a0a;
+  --bg: #000000;
   --ink: #f5f0e6;
   --ink-muted: rgba(245, 240, 230, 0.78);
   --cream: #f5f0e6;
-  --glass: rgba(20, 20, 20, 0.72);
-  --glass-border: rgba(255, 255, 255, 0.16);
-  --glass-strong: rgba(28, 28, 28, 0.85);
+  --glass: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.18);
+  --glass-strong: rgba(255, 255, 255, 0.1);
   --cta-bg: #f5f0e6;
   --cta-fg: #111111;
   --nav-active-bg: #f5f0e6;
   --nav-active-fg: #111111;
-  --grain-opacity: 0.28;
+  --liquid-opacity: 0.85;
+  --mx: 0.5;
+  --my: 0.5;
+}
+
+html.dark {
+  --bg: #000000;
+  --ink: #f5f0e6;
+  --ink-muted: rgba(245, 240, 230, 0.78);
+  --cream: #f5f0e6;
+  --glass: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.18);
+  --glass-strong: rgba(255, 255, 255, 0.1);
+  --cta-bg: #f5f0e6;
+  --cta-fg: #111111;
+  --nav-active-bg: #f5f0e6;
+  --nav-active-fg: #111111;
+  --liquid-opacity: 0.85;
 }
 
 html {
@@ -41,144 +43,192 @@ html.dark {
 }
 
 body {
-  background-color: var(--bg);
+  background-color: #000000;
   color: var(--ink);
   min-height: 100vh;
 }
 
-/*
-  Static grain tile (PNG) — no live SVG feTurbulence.
-  Cheap to composite; density varies via mask on a second layer.
-*/
-.page-grain::before,
-.page-grain::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1;
-  background-image: url('/grain.png');
-  background-repeat: repeat;
-  background-size: 128px 128px;
-  opacity: var(--grain-opacity);
-  mix-blend-mode: overlay;
-}
-
-/* Extra density over the hero glow area only */
-.page-grain::after {
-  opacity: calc(var(--grain-opacity) * 1.35);
-  -webkit-mask-image: radial-gradient(ellipse 55% 42% at 48% 32%, #000 0%, transparent 70%);
-  mask-image: radial-gradient(ellipse 55% 42% at 48% 32%, #000 0%, transparent 70%);
-}
-
-html.dark .page-grain::before,
-html.dark .page-grain::after {
-  mix-blend-mode: soft-light;
-}
-
-/* Glass look without backdrop-filter (expensive on every scroll/paint) */
 .glass-panel {
   background: var(--glass);
   border: 1px solid var(--glass-border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 .glass-nav {
   background: var(--glass-strong);
   border: 1px solid var(--glass-border);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
 .cta-pill {
   background: var(--cta-bg);
   color: var(--cta-fg);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Soft atmospheric haze — radial gradients only (no filter:blur) */
+.cta-pill:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+}
+
+html.dark .cta-pill:hover {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+}
+
+/* Liquid canvas field */
 .chroma-scene {
   position: fixed;
   inset: 0;
   overflow: hidden;
   pointer-events: none;
   z-index: 0;
-  contain: paint;
-  transform: translateZ(0);
+  background: #000000;
 }
 
-.chroma-glow {
+.liquid-field {
   position: absolute;
-  border-radius: 50%;
+  inset: -10%;
+  opacity: var(--liquid-opacity);
+  filter: blur(30px) saturate(1.5);
+  transform: translate3d(
+    calc((var(--mx) - 0.5) * 8px),
+    calc((var(--my) - 0.5) * 6px),
+    0
+  );
+  will-change: transform;
+}
+
+.liquid-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Fine film grain — fixed, no mouse-follow oval */
+.grain-layer {
+  position: absolute;
+  inset: 0;
   pointer-events: none;
+  background-repeat: repeat;
 }
 
-.chroma-glow-main {
-  left: 42%;
-  top: 28%;
-  width: min(780px, 120vw);
-  height: min(520px, 70vw);
-  transform: translate(-50%, -40%) rotate(-14deg);
-  background:
-    radial-gradient(ellipse 70% 60% at 35% 45%, rgba(59, 130, 246, 0.55), transparent 70%),
-    radial-gradient(ellipse 65% 55% at 55% 40%, rgba(34, 197, 94, 0.5), transparent 68%),
-    radial-gradient(ellipse 60% 50% at 70% 50%, rgba(234, 179, 8, 0.48), transparent 65%),
-    radial-gradient(ellipse 55% 55% at 80% 55%, rgba(239, 68, 68, 0.42), transparent 70%);
-  opacity: 0.85;
+.grain-fine {
+  opacity: 0.28;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='3.4' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+  animation: grain-drift 50s linear infinite;
 }
 
-.chroma-glow-a {
-  left: -8%;
-  bottom: 0%;
-  width: 420px;
-  height: 320px;
-  background: radial-gradient(ellipse at center, rgba(96, 165, 250, 0.45), rgba(74, 222, 128, 0.25) 45%, transparent 70%);
-  opacity: 0.7;
+.grain-soft {
+  opacity: 0.16;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.2' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23s)'/%3E%3C/svg%3E");
+  background-size: 240px 240px;
+  /* denser over the color field, still soft edges — not mouse-locked */
+  -webkit-mask-image: radial-gradient(
+    ellipse 70% 55% at 48% 38%,
+    #000 0%,
+    #000 40%,
+    transparent 78%
+  );
+  mask-image: radial-gradient(
+    ellipse 70% 55% at 48% 38%,
+    #000 0%,
+    #000 40%,
+    transparent 78%
+  );
+  animation: grain-drift-alt 65s linear infinite;
 }
 
-.chroma-glow-b {
-  right: -12%;
-  bottom: -6%;
-  width: 480px;
-  height: 420px;
-  background: radial-gradient(ellipse at 40% 40%, rgba(239, 68, 68, 0.4), rgba(250, 204, 21, 0.28) 50%, transparent 72%);
-  opacity: 0.65;
+@keyframes grain-drift {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 160px 100px;
+  }
 }
 
-.chroma-glow-c {
-  right: 8%;
-  top: 6%;
-  width: 220px;
-  height: 220px;
-  background: radial-gradient(circle, rgba(253, 224, 71, 0.4), transparent 70%);
-  opacity: 0.55;
+@keyframes grain-drift-alt {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: -120px 80px;
+  }
 }
 
-html.dark .chroma-glow-main {
-  opacity: 0.7;
+@media (prefers-reduced-motion: reduce) {
+  .liquid-field {
+    transform: none;
+  }
+
+  .grain-fine,
+  .grain-soft {
+    animation: none !important;
+  }
 }
 
-html.dark .chroma-glow-a {
-  opacity: 0.55;
+/* Film title motion */
+@keyframes film-title-in {
+  from {
+    opacity: 0;
+    letter-spacing: 0.42em;
+    transform: translateY(12px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    letter-spacing: 0.14em;
+    transform: translateY(0);
+    filter: blur(0);
+  }
 }
 
-html.dark .chroma-glow-b {
-  opacity: 0.5;
+@keyframes film-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-html.dark .chroma-glow-c {
-  opacity: 0.4;
+@keyframes film-float {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateY(-3px);
+    opacity: 0.95;
+  }
 }
 
-/*
-  No CSS keyframe animations — they forced expensive repaints over the
-  grain/glow stack on the live site. Keep a tiny opacity settle via
-  @starting-style where supported; otherwise static.
-*/
 .film-kicker {
   font-style: italic;
   letter-spacing: 0.08em;
+  animation: film-float 4.5s ease-in-out infinite;
 }
 
 .film-title {
   letter-spacing: 0.14em;
   text-transform: uppercase;
+  animation: film-title-in 1.15s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.film-fade {
+  animation: film-fade-up 1.2s ease 0.2s both;
+}
+
+.film-fade-late {
+  animation: film-fade-up 1.25s ease 0.4s both;
 }
 
 #style1 {
