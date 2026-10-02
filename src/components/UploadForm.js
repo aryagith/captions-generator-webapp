@@ -5,6 +5,8 @@ import UploadIcon from './UploadIcon';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
+const MAX_FILE_SIZE = 4.5 * 1024 * 1024;
+
 export default function UploadForm() {
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState('');
@@ -17,6 +19,11 @@ export default function UploadForm() {
     if (files.length > 0) {
       const file = files[0];
       setError('');
+      if (file.size > MAX_FILE_SIZE) {
+        window.alert('This video is too large. Choose a file smaller than 4.5 MB.');
+        ev.target.value = '';
+        return;
+      }
       setProgress(0);
       setIsUploading(true);
       try {
@@ -29,7 +36,9 @@ export default function UploadForm() {
         if (!newName) throw new Error('The upload did not return a video filename.');
         router.push('/' + encodeURIComponent(newName));
       } catch (err) {
-        setError(err.response?.data?.error || err.message || 'Upload failed. Please try again.');
+        const message = err.response?.data?.error || err.message || 'Upload failed. Please try again.';
+        if (err.response?.status === 413) window.alert(message);
+        else setError(message);
       } finally {
         setIsUploading(false);
         ev.target.value = '';
