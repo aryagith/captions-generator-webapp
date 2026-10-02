@@ -2,6 +2,8 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
+Use Node.js 24.x, as specified in `package.json` and `.nvmrc`.
+
 First, run the development server:
 
 ```bash
