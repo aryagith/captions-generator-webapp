@@ -2,10 +2,10 @@ import SparklesIcon from './SparklesIcon';
 
 export default function DemoSection() {
   return (
-    <section className="w-fit max-w-full mx-auto flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
-      <div className="glass-panel rounded-2xl p-2.5 w-[150px] sm:w-[180px] shadow-lg shadow-black/10">
-        <div className="text-[10px] tracking-[0.12em] uppercase text-[var(--ink-muted)] mb-2 px-1">
-          Before
+    <section className="demo-stage" aria-label="Before and after captions">
+      <div className="demo-card demo-before">
+        <div className="demo-label">
+          <span>Original</span><span aria-hidden="true">01</span>
         </div>
         <div className="rounded-xl overflow-hidden aspect-[9/14] bg-black/20">
           <video
@@ -19,13 +19,13 @@ export default function DemoSection() {
         </div>
       </div>
 
-      <div className="w-9 h-9 shrink-0 rounded-full glass-nav inline-flex items-center justify-center text-[var(--ink)]">
+      <div className="demo-spark" aria-hidden="true">
         <SparklesIcon />
       </div>
 
-      <div className="glass-panel rounded-2xl p-2.5 w-[150px] sm:w-[180px] shadow-lg shadow-black/10">
-        <div className="text-[10px] tracking-[0.12em] uppercase text-[var(--ink-muted)] mb-2 px-1">
-          After
+      <div className="demo-card demo-after">
+        <div className="demo-label">
+          <span>With Captioner</span><span aria-hidden="true">02</span>
         </div>
         <div className="rounded-xl overflow-hidden aspect-[9/14] bg-black/20">
           <video

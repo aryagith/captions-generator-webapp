@@ -1,42 +1,22 @@
+import Link from 'next/link';
+
 export default function PricingPage() {
   return (
-    <div className="pb-16 pt-4">
-      <section className="text-center mb-10">
-        <p
-          className="film-kicker mb-2 text-base sm:text-lg text-[var(--ink)]"
-          style={{ fontFamily: 'var(--font-kicker), Georgia, serif' }}
-        >
-          simple & free
-        </p>
-        <h1
-          className="film-title text-4xl sm:text-5xl font-bold text-[var(--ink)]"
-          style={{ fontFamily: 'var(--font-display), Georgia, serif' }}
-        >
-          Pricing
-        </h1>
-        <p className="film-fade mt-3 text-[var(--ink-muted)] max-w-md mx-auto text-sm sm:text-base">
-          You don&apos;t even need to login. Enjoy unlimited access for free.
-        </p>
-      </section>
-
-      <div className="film-fade-late flex justify-center">
-        <div className="glass-panel rounded-3xl p-6 sm:p-8 w-full max-w-sm text-center shadow-lg shadow-black/10">
-          <h2 className="text-lg font-semibold mb-2 text-[var(--ink)]">
-            Current plan
-          </h2>
-          <p className="text-3xl font-bold mb-6 text-[var(--ink)]">
-            $0 <span className="text-base font-normal opacity-70">/month</span>
-          </p>
-          <ul className="text-left space-y-2 text-sm text-[var(--ink-muted)] mb-6">
-            <li>Unlimited access</li>
-            <li>All features included</li>
-            <li>Email support</li>
-          </ul>
-          <p className="text-sm text-[var(--ink-muted)]">
-            More pricing options will be available soon.
-          </p>
-        </div>
+    <section className="max-w-xl mx-auto py-8 sm:py-12 film-fade">
+      <p className="eyebrow text-center mb-5">GOOD STORIES SHOULDN’T COST MORE.</p>
+      <h1 className="display-title text-center">All the words.<br /><em>None of the fees.</em></h1>
+      <p className="text-center text-sm text-[var(--ink-muted)] mt-6 mb-9">Everything you need to caption your next video. No account required.</p>
+      <div className="glass-panel rounded-3xl p-7 sm:p-9">
+        <div className="flex items-center justify-between"><h2 className="text-sm font-semibold">The everyday plan</h2><span className="small-badge">FREE</span></div>
+        <p className="text-6xl tracking-tight mt-7 mb-2">$0<span className="text-sm text-[var(--ink-muted)] tracking-normal ml-2">/ forever</span></p>
+        <p className="text-xs text-[var(--ink-muted)] mb-7">For your first video. And the next one.</p>
+        <ul className="border-t border-[var(--glass-border)] py-6 space-y-4 text-sm">
+          {['Automatic speech transcription', 'Editable captions and timing', 'Custom text and outline colors', 'Captioned video downloads'].map(feature => (
+            <li key={feature} className="flex gap-3"><span className="text-[var(--accent)]" aria-hidden="true">✓</span>{feature}</li>
+          ))}
+        </ul>
+        <Link href="/" className="cta-pill primary-button w-full">Make your first caption ↗</Link>
       </div>
-    </div>
+    </section>
   );
 }

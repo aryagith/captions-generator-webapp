@@ -3,32 +3,26 @@ import UploadForm from '../components/UploadForm';
 
 export default function Home() {
   return (
-    <div className="pb-16">
-      <section className="text-center pt-6 sm:pt-12 pb-10">
-        <p
-          className="film-kicker mb-2 text-base sm:text-lg text-[var(--ink)]"
-          style={{ fontFamily: 'var(--font-kicker), Georgia, serif' }}
-        >
-          captions, beautifully
-        </p>
-        <h1
-          className="film-title text-4xl sm:text-6xl font-bold text-[var(--ink)]"
-          style={{ fontFamily: 'var(--font-display), Georgia, serif' }}
-        >
-          Captioner
-        </h1>
-        <p className="film-fade mt-4 mx-auto max-w-sm text-sm sm:text-base text-[var(--ink-muted)]">
-          Beautiful captions in one upload. Free forever — no login.
-        </p>
-        <div className="film-fade-late mt-8 flex justify-center">
-          <UploadForm />
+    <div>
+      <section className="home-hero">
+        <div className="film-fade">
+          <p className="eyebrow mb-6"><span className="status-dot" /> SMALL DETAILS. BIG DIFFERENCE.</p>
+          <h1 className="display-title">Every word.<br /><em>Worth seeing.</em></h1>
+          <p className="hero-description">Turn your video into something everyone can follow. Automatic captions, your finishing touch.</p>
+          <div className="mt-8"><UploadForm /></div>
+          <p className="mt-5 text-xs text-[var(--ink-muted)]">Free to use <span className="mx-2" aria-hidden="true">·</span> No account needed</p>
         </div>
+        <div className="film-fade-late"><DemoSection /></div>
       </section>
-
-      <p className="text-center text-[10px] sm:text-xs tracking-[0.16em] uppercase text-[var(--ink-muted)] mb-4">
-        See the difference
-      </p>
-      <DemoSection />
+      <section className="workflow" aria-label="How it works">
+        {[
+          ['01', 'Drop into the story.', 'Choose a video. We’ll pick up the words.'],
+          ['02', 'Make it sound like you.', 'Fine-tune the text, timing, and colors.'],
+          ['03', 'Ready for the world.', 'Apply your captions and save your video.'],
+        ].map(([number, title, description]) => (
+          <div key={number}><span className="eyebrow">{number}</span><h2>{title}</h2><p>{description}</p></div>
+        ))}
+      </section>
     </div>
   );
 }

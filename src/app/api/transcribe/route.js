@@ -101,6 +101,7 @@ export async function GET(req){
     if(existingJob) {
         return Response.json({
             status:existingJob.TranscriptionJob.TranscriptionJobStatus,
+            failureReason: existingJob.TranscriptionJob.FailureReason,
         })
     }
 
