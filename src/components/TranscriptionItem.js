@@ -1,7 +1,6 @@
-import { useState } from "react";
-
 export default function TranscriptionItem({ 
   item , 
+  index,
   handleStartTimeChange,
   handleEndTimeChange,
   handleContentChange
@@ -10,18 +9,21 @@ export default function TranscriptionItem({
     return '';
   }
     return (
-    <div className="my-1 grid grid-cols-3 gap-1 items-center ">
+    <div className="transcript-columns transcript-row">
         <input type="text" 
-        className="bg-white/20 p-1 rounded-md" 
+        aria-label={`Word ${index + 1} start time in seconds`} inputMode="decimal"
+        className="editor-input time-input"
         value={item.start_time} onChange={handleStartTimeChange} />
 
         <input type="text" 
-        className="bg-white/20 p-1 rounded-md"
+        aria-label={`Word ${index + 1} end time in seconds`} inputMode="decimal"
+        className="editor-input time-input"
         value={item.end_time} 
         onChange={handleEndTimeChange} />
 
         <input type="text"
-         className="bg-white/20 p-1 rounded-md"
+         aria-label={`Word ${index + 1} caption text`}
+         className="editor-input"
          value={item.content} 
          onChange={handleContentChange} />
     </div>

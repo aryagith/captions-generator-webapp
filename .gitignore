@@ -37,6 +37,3 @@ next-env.d.ts
 
 #ignoring secret keys 
 .env
-
-# brainstorm / companion sessions
-.superpowers/

@@ -3,22 +3,20 @@
 import { useTheme } from './ThemeProvider';
 
 export default function ThemeToggle() {
-  const { theme, resolved, cycleTheme } = useTheme();
-
-  const label =
-    theme === 'system'
-      ? `Theme: system (${resolved})`
-      : `Theme: ${theme}`;
+  const { resolved, setTheme } = useTheme();
+  const isDark = resolved === 'dark';
+  const label = `Switch to ${isDark ? 'light' : 'dark'} mode`;
 
   return (
     <button
       type="button"
-      onClick={cycleTheme}
+      onClick={() => setTheme(isDark ? 'light' : 'dark')}
       aria-label={label}
       title={label}
-      className="w-8 h-8 rounded-full glass-nav inline-flex items-center justify-center text-sm text-[var(--ink)]"
+      className="h-11 px-3 rounded-full glass-nav inline-flex gap-2 items-center justify-center text-xs text-[var(--ink)] hover:bg-[var(--input-bg)] transition-colors"
     >
-      {resolved === 'dark' ? '☾' : '☀'}
+      <span aria-hidden="true" className="text-base">{isDark ? '☾' : '☀'}</span>
+      <span>{isDark ? 'Dark' : 'Light'}</span>
     </button>
   );
 }

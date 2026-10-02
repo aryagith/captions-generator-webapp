@@ -6,7 +6,6 @@ const ThemeContext = createContext({
   theme: 'system',
   resolved: 'light',
   setTheme: () => {},
-  cycleTheme: () => {},
 });
 
 function getSystemTheme() {
@@ -23,21 +22,25 @@ function applyTheme(resolved) {
 export function ThemeProvider({ children }) {
   const [theme, setThemeState] = useState('system');
   const [resolved, setResolved] = useState('light');
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    const stored = localStorage.getItem('captioner-theme');
+    let stored;
+    try { stored = localStorage.getItem('captioner-theme'); } catch {}
     const initial =
       stored === 'light' || stored === 'dark' || stored === 'system'
         ? stored
         : 'system';
     setThemeState(initial);
+    setReady(true);
   }, []);
 
   useEffect(() => {
+    if (!ready) return undefined;
     const next = theme === 'system' ? getSystemTheme() : theme;
     setResolved(next);
     applyTheme(next);
-    localStorage.setItem('captioner-theme', theme);
+    try { localStorage.setItem('captioner-theme', theme); } catch {}
 
     if (theme !== 'system') return undefined;
 
@@ -49,22 +52,14 @@ export function ThemeProvider({ children }) {
     };
     mq.addEventListener('change', onChange);
     return () => mq.removeEventListener('change', onChange);
-  }, [theme]);
+  }, [theme, ready]);
 
   function setTheme(next) {
     setThemeState(next);
   }
 
-  function cycleTheme() {
-    setThemeState((current) => {
-      if (current === 'system') return 'light';
-      if (current === 'light') return 'dark';
-      return 'system';
-    });
-  }
-
   return (
-    <ThemeContext.Provider value={{ theme, resolved, setTheme, cycleTheme }}>
+    <ThemeContext.Provider value={{ theme, resolved, setTheme }}>
       {children}
     </ThemeContext.Provider>
   );

@@ -16,8 +16,8 @@ export default function SiteHeader() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="relative z-20 mb-10">
-      <div className="glass-nav rounded-full px-4 py-2.5 flex items-center justify-between gap-3">
+    <header className="relative z-20 mb-8 sm:mb-12">
+      <div className="glass-nav rounded-2xl px-4 sm:px-5 py-3 flex items-center justify-between gap-3">
         <Link
           href="/"
           className="inline-flex items-center gap-2 font-semibold tracking-wide text-[var(--ink)]"
@@ -26,13 +26,14 @@ export default function SiteHeader() {
           <span className="text-sm sm:text-base">Captioner</span>
         </Link>
 
-        <nav className="hidden sm:flex items-center gap-2 text-sm text-[var(--ink)]">
+        <nav aria-label="Main navigation" className="hidden sm:flex items-center gap-2 text-sm text-[var(--ink)]">
           {links.map((link) => {
             const active = pathname === link.href;
             return (
               <Link
                 key={link.href}
                 href={link.href}
+                aria-current={active ? 'page' : undefined}
                 className={
                   active
                     ? 'rounded-full px-3 py-1.5 font-semibold bg-[var(--nav-active-bg)] text-[var(--nav-active-fg)]'
@@ -56,8 +57,9 @@ export default function SiteHeader() {
           <ThemeToggle />
           <button
             type="button"
-            aria-label="Open menu"
+            aria-label={open ? 'Close menu' : 'Open menu'}
             aria-expanded={open}
+            aria-controls="mobile-menu"
             onClick={() => setOpen((v) => !v)}
             className="w-8 h-8 rounded-full glass-nav inline-flex items-center justify-center text-[var(--ink)]"
           >
@@ -67,7 +69,7 @@ export default function SiteHeader() {
       </div>
 
       {open && (
-        <div className="sm:hidden mt-2 glass-panel rounded-2xl p-3 flex flex-col gap-1 text-sm">
+        <nav id="mobile-menu" aria-label="Mobile navigation" className="sm:hidden mt-2 glass-panel rounded-2xl p-3 flex flex-col gap-1 text-sm">
           {links.map((link) => (
             <Link
               key={link.href}
@@ -84,7 +86,7 @@ export default function SiteHeader() {
           >
             Contact
           </a>
-        </div>
+        </nav>
       )}
     </header>
   );
