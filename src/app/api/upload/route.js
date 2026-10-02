@@ -1,6 +1,8 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import uniqid from 'uniqid'
 
+const MAX_FILE_SIZE = 4.5 * 1024 * 1024;
+
 export async function POST(req){
     const region = process.env.BUCKET_REGION;
     const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
@@ -19,6 +21,10 @@ export async function POST(req){
 
     const formData = await req.formData();
     const file = formData.get('file');
+
+    if (file?.size > MAX_FILE_SIZE) {
+        return Response.json({ error: 'This video is too large. Choose a file smaller than 4.5 MB.' }, { status: 413 });
+    }
     
     const{name, type} = file;
     const data = await file.arrayBuffer();
@@ -44,4 +50,4 @@ export async function POST(req){
     await s3client.send(uploadCommand)
 
     return Response.json({name,ext,newName})
-} 
+}
