@@ -76,6 +76,13 @@ export default function ResultVideo({ fileName, transcriptionItems }) {
 
   return (
     <div className="p-5">
+      <label className="block mb-5 text-xs text-[var(--ink-muted)]">
+        Caption font
+        <select value={fontFamily} onChange={ev => setFontFamily(ev.target.value)} disabled={isExporting} className="editor-input mt-2 border-[var(--glass-border)]" aria-label="Caption font">
+          {fonts.map(font => <option key={font.family} value={font.family}>{font.label}</option>)}
+        </select>
+        <span className="block mt-3 text-base text-[var(--ink)]" style={{ fontFamily: font.family, fontWeight: font.bold ? 700 : 400 }}>Make every word count.</span>
+      </label>
       <video src={outputUrl || videoUrl} controls playsInline preload="metadata" className="preview-video" aria-label="Video preview" />
       <fieldset className="color-controls" disabled={isExporting}>
         <legend className="sr-only">Caption colors</legend>
@@ -88,13 +95,6 @@ export default function ResultVideo({ fileName, transcriptionItems }) {
           <span>Outline</span>
         </label>
       </fieldset>
-      <label className="block mb-5 text-xs text-[var(--ink-muted)]">
-        Caption font
-        <select value={fontFamily} onChange={ev => setFontFamily(ev.target.value)} disabled={isExporting} className="editor-input mt-2 border-[var(--glass-border)]" aria-label="Caption font">
-          {fonts.map(font => <option key={font.family} value={font.family}>{font.label}</option>)}
-        </select>
-        <span className="block mt-3 text-base text-[var(--ink)]" style={{ fontFamily: font.family, fontWeight: font.bold ? 700 : 400 }}>Make every word count.</span>
-      </label>
       <button onClick={transcode} disabled={isExporting || !transcriptionItems.some(Boolean)} className="cta-pill primary-button w-full">
         <SparklesIcon /><span>{isExporting ? (progress ? `Rendering · ${progress}%` : 'Preparing your export…') : 'Export captioned video'}</span>
       </button>

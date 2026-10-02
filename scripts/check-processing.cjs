@@ -41,9 +41,12 @@ function load(filename, overrides = {}) {
 }
 
 const ResultVideo = load(path.join(root, 'src/components/ResultVideo.js')).default;
-assert.match(renderToString(React.createElement(ResultVideo, {
+const videoMarkup = renderToString(React.createElement(ResultVideo, {
   fileName: 'test.mp4', transcriptionItems: [],
-})), /<video/); // This used to throw: ffmpeg.wasm does not support nodejs.
+}));
+assert.match(videoMarkup, /<video/); // This used to throw: ffmpeg.wasm does not support nodejs.
+assert.ok(videoMarkup.indexOf('aria-label="Caption font"') >= 0);
+assert.ok(videoMarkup.indexOf('aria-label="Caption font"') < videoMarkup.indexOf('<video'), 'Font selector must appear above the video.');
 
 const FilePage = load(path.join(root, 'src/app/[filename]/page.js')).default;
 assert.match(renderToString(React.createElement(FilePage, {
