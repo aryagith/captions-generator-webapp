@@ -106,7 +106,7 @@ async function checkPolling() {
 async function checkFonts() {
   const originals = { useState: React.useState, useRef: React.useRef, useEffect: React.useEffect };
   try {
-    for (const family of ['Roboto']) {
+    for (const family of ['Roboto', 'Roboto Condensed', 'Lora', 'Space Mono']) {
       const states = [];
       const written = [];
       let command;
@@ -123,7 +123,7 @@ async function checkFonts() {
       }).default;
       React.useState = initial => {
         const index = states.length;
-        states.push(initial);
+        states.push(index === 2 ? family : initial);
         return [states[index], value => { states[index] = value; }];
       };
       React.useRef = () => ({ current: null });
@@ -134,10 +134,10 @@ async function checkFonts() {
       await element.props.children.find(child => child?.type === 'button').props.onClick();
       assert.ok(written.includes(`/tmp/${family}.ttf`), `${family} must be loaded for export`);
       assert.match(command[command.indexOf('-vf') + 1], new RegExp(`Fontname=${family},Bold=${family === 'Roboto Condensed' ? -1 : 0},`));
-      assert.equal(states[4], '', `${family} export must not report an error`);
-      assert.equal(states[2], false, 'Export button must be re-enabled');
-      assert.ok(states[5].startsWith('blob:'));
-      URL.revokeObjectURL(states[5]);
+      assert.equal(states[5], '', `${family} export must not report an error`);
+      assert.equal(states[3], false, 'Export button must be re-enabled');
+      assert.ok(states[6].startsWith('blob:'));
+      URL.revokeObjectURL(states[6]);
     }
   } finally {
     Object.assign(React, originals);
